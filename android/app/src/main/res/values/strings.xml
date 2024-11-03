@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">SteamPF</string>
+        <color name="app_background">#171d25</color>
+
 </resources>

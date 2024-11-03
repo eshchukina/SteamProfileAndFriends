@@ -1,6 +1,6 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 import FriendsList from '../screen/FriendsList';
 import UserProfile from '../screen/UserProfile';
 
@@ -14,15 +14,19 @@ const ProfileTabs = () => {
           let iconName;
 
           if (route.name === 'UserProfile') {
-            iconName = focused ? 'person' : 'person-outline';
+            iconName = 'user-alt';
           } else if (route.name === 'FriendsList') {
-            iconName = focused ? 'people' : 'people-outline';
+            iconName = 'users';
           }
 
           return <Icon name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: 'tomato',
-        tabBarInactiveTintColor: 'gray',
+        tabBarActiveTintColor: '#ff49b6',
+        tabBarInactiveTintColor: '#c4c4c4',
+        tabBarStyle: {backgroundColor: '#171d25'},
+        headerStyle: {backgroundColor: '#171d25'},
+        headerTintColor: '#c4c4c4',
+        headerTitleAlign: 'center',
       })}>
       <Tab.Screen
         name="UserProfile"

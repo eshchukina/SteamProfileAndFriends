@@ -3,8 +3,8 @@ import {View, Text, StyleSheet, Image, ActivityIndicator} from 'react-native';
 import CustomButton from '../components/CustomButton';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../navigation/AppNavigator';
-import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {fetchProfile} from '../api/steamApi';
 
 type HomeScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -20,32 +20,14 @@ const UserProfile: React.FC<Props> = ({navigation}) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchProfile = async () => {
+  const loadProfile = async () => {
     setLoading(true);
     setError(null);
     try {
-      const apiKey = await AsyncStorage.getItem('apiKey');
-      const steamId = await AsyncStorage.getItem('steamId');
-
-      if (!apiKey || !steamId) {
-        setError('API key или Steam ID отсутствуют');
-        return;
-      }
-
-      const response = await axios.get(
-        `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/`,
-        {
-          params: {
-            key: apiKey,
-            steamids: steamId,
-          },
-        },
-      );
-
-      setProfileData(response.data.response.players[0]);
+      const profile = await fetchProfile();
+      setProfileData(profile);
     } catch (error) {
-      console.log(error);
-      setError('Ошибка при загрузке данных профиля');
+      setError(error.message);
     } finally {
       setLoading(false);
     }
@@ -59,7 +41,7 @@ const UserProfile: React.FC<Props> = ({navigation}) => {
   };
 
   useEffect(() => {
-    fetchProfile();
+    loadProfile();
   }, []);
 
   return (

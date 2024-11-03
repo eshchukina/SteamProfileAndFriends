@@ -1,14 +1,8 @@
 import React from 'react';
 import {View, Text, StyleSheet, Image} from 'react-native';
+import {FriendInfo} from '../types/types';
 
-type Friend = {
-  personaname: string;
-  avatar: string;
-  friendSince: string;
-  index: number;
-};
-
-const FriendItem: React.FC<Friend> = ({
+const FriendItem: React.FC<FriendInfo> = ({
   index,
   personaname,
   avatar,

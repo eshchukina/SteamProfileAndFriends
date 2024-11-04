@@ -1,3 +1,26 @@
+Приложение "Steam Профиль и Друзья"
+
+1.Экран авторизации:
+Здесь нужно ввести API Key и Steam ID. При неверном вводе отображаются сообщения об ошибках, а при корректном вводе вы переходите к экрану профиля и друзей.
+При повторном открытии приложения, если вы не выходили из него, будет загружаться страница "Профиль пользователя". Если вы нажмете "Выйти" или закроете приложение, при следующем запуске вы снова увидите экран авторизации.
+
+2.Экран профиля и друзей состоит из двух вкладок:
+- Профиль пользователя
+Отображает информацию о пользователе, включая аватар, никнейм и статус в сети, который обновляется в зависимости от ваших действий.
+
+- Список друзей
+Здесь отображается список ваших друзей, включая их аватар, Steam ID и дату добавления в друзья, отсортированные в порядке убывания.
+
+![screenshot 1](https://github.com/eshchukina/SteamProfileAndFriends/blob/main/src/assets/screenshots/photo_2024-11-04_23-41-37.jpg)
+![screenshot 2](https://github.com/eshchukina/SteamProfileAndFriends/blob/main/src/assets/screenshots/photo_2024-11-04_23-41-41.jpg)
+![screenshot 3](https://github.com/eshchukina/SteamProfileAndFriends/blob/main/src/assets/screenshots/photo_2024-11-04_23-41-42.jpg)
+![screenshot 4](https://github.com/eshchukina/SteamProfileAndFriends/blob/main/src/assets/screenshots/photo_2024-11-04_23-41-44.jpg)
+![screenshot 5](https://github.com/eshchukina/SteamProfileAndFriends/blob/main/src/assets/screenshots/photo_2024-11-04_23-41-46.jpg)
+![screenshot 6](https://github.com/eshchukina/SteamProfileAndFriends/blob/main/src/assets/screenshots/photo_2024-11-04_23-41-54.jpg)
+![screenshot 7](https://github.com/eshchukina/SteamProfileAndFriends/blob/main/src/assets/screenshots/photo_2024-11-04_23-41-58.jpg)
+![screenshot 8](https://github.com/eshchukina/SteamProfileAndFriends/blob/main/src/assets/screenshots/photo_2024-11-04_23-41-56.jpg)
+
+
 This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 
 # Getting Started

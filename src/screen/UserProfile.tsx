@@ -3,7 +3,7 @@ import {View, Text, StyleSheet, Image, ActivityIndicator} from 'react-native';
 import CustomButton from '../components/CustomButton';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../navigation/AppNavigator';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useAuth} from '../context/AuthContext';
 import {fetchProfile} from '../api/steamApi';
 
 type HomeScreenNavigationProp = NativeStackNavigationProp<
@@ -16,33 +16,42 @@ type Props = {
 };
 
 const UserProfile: React.FC<Props> = ({navigation}) => {
+  const {steamId, apiKey, logout} = useAuth();
   const [profileData, setProfileData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const loadProfile = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const profile = await fetchProfile();
-      setProfileData(profile);
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+  useEffect(() => {
+    const loadProfile = async () => {
+      if (!steamId || !apiKey) {
+        setProfileData(null);
+        return;
+      }
+
+      setLoading(true);
+      setError(null);
+      try {
+        const profile = await fetchProfile(steamId, apiKey);
+        setProfileData(profile);
+      } catch (error) {
+        if (error instanceof Error) {
+          setError(error.message);
+        } else {
+          setError('Произошла неизвестная ошибка');
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadProfile();
+  }, [steamId, apiKey]);
 
   const handleLogout = async () => {
-    await AsyncStorage.removeItem('apiKey');
-    await AsyncStorage.removeItem('steamId');
+    await logout();
     setProfileData(null);
     navigation.navigate('Auth');
   };
-
-  useEffect(() => {
-    loadProfile();
-  }, []);
 
   return (
     <View style={styles.container}>
@@ -60,7 +69,6 @@ const UserProfile: React.FC<Props> = ({navigation}) => {
             <Text style={styles.nickname}>{profileData.personaname}</Text>
             <View style={styles.statusContainer}>
               <Text style={styles.text}>Статус:</Text>
-
               {profileData.personastate === 1 ? (
                 <Text style={styles.status}>online</Text>
               ) : (
@@ -96,13 +104,13 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   nickname: {
-    fontSize: 20,
-    color: '#FFFFFF',
+    fontSize: 25,
+    color: '#fff',
     marginBottom: 8,
   },
   status: {
     fontSize: 18,
-    color: '#00FF00',
+    color: 'grey',
   },
   statusOffline: {
     fontSize: 18,
@@ -119,7 +127,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 18,
-    color: '#FFFFFF',
+    color: '#fff',
     paddingRight: 10,
   },
 });

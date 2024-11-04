@@ -1,9 +1,11 @@
 import React, {useState} from 'react';
 import {View, Text, StyleSheet, TextInput} from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../navigation/AppNavigator';
 import CustomButton from '../components/CustomButton';
+import {useAuth} from '../context/AuthContext';
+import {useFocusEffect} from '@react-navigation/native';
+import {fetchProfile} from '../api/steamApi';
 
 type HomeScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -15,26 +17,38 @@ type Props = {
 };
 
 const AuthScreen: React.FC<Props> = ({navigation}) => {
+  const {login} = useAuth();
   const [apiKey, setApiKey] = useState('');
   const [steamId, setSteamId] = useState('');
   const [error, setError] = useState('');
 
-  const handleLogin = async () => {
-    if (!apiKey || !steamId) {
-      setError('Пожалуйста, введите API Key и Steam ID');
-      return;
-    }
+  useFocusEffect(
+    React.useCallback(() => {
+      setError('');
+      setApiKey('');
+      setSteamId('');
+    }, []),
+  );
 
+  const handleLogin = async () => {
     try {
-      await AsyncStorage.setItem('apiKey', apiKey);
-      await AsyncStorage.setItem('steamId', steamId);
+      const profile = await fetchProfile(steamId, apiKey);
+      if (!profile) {
+        setError('Неверный API Key или Steam ID');
+        return;
+      }
+
+      await login(apiKey, steamId);
       setError('');
       navigation.navigate('Profile');
     } catch (error) {
-      setError('Не удалось сохранить данные. Попробуйте снова');
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError('Не удалось сохранить данные. Попробуйте снова');
+      }
     }
   };
-
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Авторизация</Text>
@@ -44,21 +58,26 @@ const AuthScreen: React.FC<Props> = ({navigation}) => {
       <TextInput
         style={styles.input}
         placeholder="API Key"
-        placeholderTextColor="#fff"
+        placeholderTextColor="#c4c4c4"
         value={apiKey}
         onChangeText={text => {
           setApiKey(text);
-          if (error) setError('');
+          if (error) {
+            setError('');
+          }
         }}
       />
+
       <TextInput
         style={styles.input}
         placeholder="Steam ID"
-        placeholderTextColor="#fff"
+        placeholderTextColor="#c4c4c4"
         value={steamId}
         onChangeText={text => {
           setSteamId(text);
-          if (error) setError('');
+          if (error) {
+            setError('');
+          }
         }}
       />
       <CustomButton title="Вход" onPress={handleLogin} />
@@ -79,19 +98,33 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     color: '#fff',
   },
+  inputContainer: {
+    width: '100%',
+    position: 'relative',
+  },
   input: {
     color: '#fff',
     width: '100%',
     padding: 10,
     borderWidth: 2,
-    borderColor: '#c4c4c4',
+    borderColor: '#fff',
     borderRadius: 10,
-    marginBottom: 15,
+    marginBottom: 20,
+  },
+  toggleButton: {
+    position: 'absolute',
+    right: 10,
+    top: 10,
+  },
+  toggleButtonText: {
+    color: '#fff',
+    fontSize: 14,
   },
   error: {
-    color: '#ff4d4d',
+    color: 'red',
     marginBottom: 15,
-    fontSize: 16,
+    fontSize: 15,
+    textAlign: 'center',
   },
 });
 

@@ -2,15 +2,18 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Friend, ProfileData} from '../types/types';
 
-export const fetchProfile = async (): Promise<ProfileData | null> => {
+export const fetchProfile = async (
+  steamId: string,
+  apiKey: string,
+): Promise<ProfileData | null> => {
+  if (!apiKey) {
+    throw new Error('Введите API Key');
+  }
+  if (!steamId) {
+    throw new Error('Введите Steam ID');
+  }
+
   try {
-    const apiKey = await AsyncStorage.getItem('apiKey');
-    const steamId = await AsyncStorage.getItem('steamId');
-
-    if (!apiKey || !steamId) {
-      throw new Error('API key или Steam ID отсутствуют');
-    }
-
     const response = await axios.get(
       `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/`,
       {
@@ -21,11 +24,33 @@ export const fetchProfile = async (): Promise<ProfileData | null> => {
       },
     );
 
-    return response.data.response.players[0];
+    const players = response.data.response.players;
+
+    if (!players || players.length === 0) {
+      console.log('Проверка игроков: массив пустой');
+      throw new Error('Пользователь не найден. Проверьте Steam ID');
+    }
+
+    return players[0];
   } catch (error) {
-    console.error(error);
-    throw new Error('Ошибка при загрузке данных профиля');
+    if (axios.isAxiosError(error)) {
+      if (error.response) {
+        if (error.response.status === 403) {
+          throw new Error('Проверьте правильность API Key');
+        } else if (error.response.status === 404) {
+          throw new Error('Пользователь не найден. Проверьте Steam ID');
+        }
+      } else {
+        console.error('Ошибка без ответа от API:', error.message);
+        throw new Error('Ошибка при загрузке данных профиля: ' + error.message);
+      }
+    } else {
+      if (error instanceof Error) {
+        console.log(error.message);
+      }
+    }
   }
+  return null;
 };
 
 export const fetchFriends = async (): Promise<Friend[]> => {
@@ -60,7 +85,9 @@ export const fetchFriends = async (): Promise<Friend[]> => {
       {
         params: {
           key: apiKey,
-          steamids: friendsSteamIds.map(f => f.steamid).join(','),
+          steamids: friendsSteamIds
+            .map((f: {steamid: any}) => f.steamid)
+            .join(','),
         },
       },
     );
@@ -68,7 +95,6 @@ export const fetchFriends = async (): Promise<Friend[]> => {
     const friendsDetails: Friend[] =
       friendsDetailsResponse.data.response.players.map((player: any) => ({
         steamId: player.steamid,
-        personaname: player.personaname,
         avatar: player.avatarfull,
         friendSince:
           friendsSteamIds.find(

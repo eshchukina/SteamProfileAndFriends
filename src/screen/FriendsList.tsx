@@ -25,7 +25,7 @@ const FriendsList: React.FC = () => {
         data={friendsData}
         renderItem={({item, index}) => (
           <FriendItem
-            personaname={item.personaname}
+            steamId={item.steamId}
             index={index}
             avatar={item.avatar}
             friendSince={item.friendSince}
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#1b2838',
-    padding: 16,
+    padding: 15,
   },
 });
 

@@ -4,15 +4,15 @@ import {FriendInfo} from '../types/types';
 
 const FriendItem: React.FC<FriendInfo> = ({
   index,
-  personaname,
   avatar,
   friendSince,
+  steamId,
 }) => (
   <View style={styles.friendItem}>
     <Text style={styles.index}>{index + 1}</Text>
     <Image source={{uri: avatar}} style={styles.avatar} />
     <View style={styles.infoContainer}>
-      <Text style={styles.personaname}>{personaname}</Text>
+      <Text style={styles.personaname}>{steamId}</Text>
       <Text style={styles.friendSince}>Добавлен: {friendSince}</Text>
     </View>
   </View>
@@ -23,12 +23,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#c4c4c4',
+    borderBottomWidth: 2,
+    borderBottomColor: '#171d25',
   },
   index: {
     fontSize: 16,
-    color: '#FFFFFF',
+    color: '#c4c4c4',
     marginRight: 8,
   },
   avatar: {
@@ -42,11 +42,11 @@ const styles = StyleSheet.create({
   },
   personaname: {
     fontSize: 16,
-    color: '#FFFFFF',
+    color: '#fff',
   },
   friendSince: {
     fontSize: 14,
-    color: '#c4c4c4',
+    color: '#fff',
   },
 });
 

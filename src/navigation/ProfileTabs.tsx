@@ -9,25 +9,30 @@ const Tab = createBottomTabNavigator();
 const ProfileTabs = () => {
   return (
     <Tab.Navigator
-      screenOptions={({route}) => ({
-        tabBarIcon: ({focused, color, size}) => {
-          let iconName;
-
-          if (route.name === 'UserProfile') {
+      screenOptions={({route}) => {
+        let iconName: string = '';
+        switch (route.name) {
+          case 'UserProfile':
             iconName = 'user-alt';
-          } else if (route.name === 'FriendsList') {
+            break;
+          case 'FriendsList':
             iconName = 'users';
-          }
+            break;
+        }
+        const tabBarIcon = ({color, size}: {color: string; size: number}) => (
+          <Icon name={iconName} size={size} color={color} />
+        );
 
-          return <Icon name={iconName} size={size} color={color} />;
-        },
-        tabBarActiveTintColor: '#ff49b6',
-        tabBarInactiveTintColor: '#c4c4c4',
-        tabBarStyle: {backgroundColor: '#171d25'},
-        headerStyle: {backgroundColor: '#171d25'},
-        headerTintColor: '#c4c4c4',
-        headerTitleAlign: 'center',
-      })}>
+        return {
+          tabBarIcon,
+          tabBarActiveTintColor: '#ff49b6',
+          tabBarInactiveTintColor: '#c4c4c4',
+          tabBarStyle: {backgroundColor: '#171d25'},
+          headerStyle: {backgroundColor: '#171d25'},
+          headerTintColor: '#c4c4c4',
+          headerTitleAlign: 'center',
+        };
+      }}>
       <Tab.Screen
         name="UserProfile"
         component={UserProfile}

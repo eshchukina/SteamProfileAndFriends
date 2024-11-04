@@ -2,6 +2,8 @@ import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import AuthScreen from '../screen/AuthScreen';
 import ProfileScreen from '../screen/ProfileScreen';
+import {useAuth} from '../context/AuthContext';
+import {ActivityIndicator, View} from 'react-native';
 
 export type RootStackParamList = {
   Auth: undefined;
@@ -11,8 +13,19 @@ export type RootStackParamList = {
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const AppNavigator = () => {
+  const {apiKey, steamId, isLoading} = useAuth();
+
+  if (isLoading) {
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <ActivityIndicator size="large" color="#fff" />
+      </View>
+    );
+  }
+
   return (
     <Stack.Navigator
+      initialRouteName={apiKey && steamId ? 'Profile' : 'Auth'}
       screenOptions={{
         headerShown: false,
         animation: 'fade',

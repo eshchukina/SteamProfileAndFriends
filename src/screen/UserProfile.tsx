@@ -32,7 +32,8 @@ const UserProfile: React.FC<Props> = ({navigation}) => {
       setError(null);
       try {
         const profile = await fetchProfile(steamId, apiKey);
-        setProfileData(profile);
+        console.log("Profile data:", profile);
+                setProfileData(profile);
       } catch (error) {
         if (error instanceof Error) {
           setError(error.message);
@@ -110,7 +111,7 @@ const styles = StyleSheet.create({
   },
   status: {
     fontSize: 18,
-    color: 'grey',
+    color: '#b3ff00',
   },
   statusOffline: {
     fontSize: 18,

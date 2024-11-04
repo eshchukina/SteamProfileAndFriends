@@ -32,8 +32,7 @@ const UserProfile: React.FC<Props> = ({navigation}) => {
       setError(null);
       try {
         const profile = await fetchProfile(steamId, apiKey);
-        console.log("Profile data:", profile);
-                setProfileData(profile);
+        setProfileData(profile);
       } catch (error) {
         if (error instanceof Error) {
           setError(error.message);

@@ -1,6 +1,6 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import FriendsList from '../screen/FriendsList';
 import UserProfile from '../screen/UserProfile';
 
@@ -13,7 +13,7 @@ const ProfileTabs = () => {
         let iconName: string = '';
         switch (route.name) {
           case 'UserProfile':
-            iconName = 'user-alt';
+            iconName = 'user';
             break;
           case 'FriendsList':
             iconName = 'users';

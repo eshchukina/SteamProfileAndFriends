@@ -112,6 +112,6 @@ export const fetchFriends = async (): Promise<Friend[]> => {
       return dateB.getTime() - dateA.getTime();
     });
   } catch (error) {
-    throw new Error('Ошибка при загрузке данных друзей');
+    throw new Error('Ошибка при получении данных. Пожалуйста, попробуйте позже');
   }
 };

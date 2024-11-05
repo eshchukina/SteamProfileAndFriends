@@ -31,8 +31,7 @@ const FriendsList: React.FC = () => {
       }
     } catch (err) {
       if (err instanceof Error) {
-        console.log(err.message);
-        setError('Ошибка при получении данных. Пожалуйста, попробуйте позже');
+        setError(err.message);
       }
     } finally {
       setLoading(false);

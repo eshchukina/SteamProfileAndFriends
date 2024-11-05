@@ -2,6 +2,7 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Friend, ProfileData} from '../types/types';
+import {API_BASE_URL} from '../../config';
 
 // Получение данныx профиля пользователя по его steam id и api key
 export const fetchProfile = async (
@@ -17,7 +18,7 @@ export const fetchProfile = async (
 
   try {
     const response = await axios.get(
-      `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/`,
+      `${API_BASE_URL}/ISteamUser/GetPlayerSummaries/v2/`,
       {
         params: {
           key: apiKey,
@@ -63,7 +64,7 @@ export const fetchFriends = async (): Promise<Friend[]> => {
     }
     // Запрос для получения списка друзей
     const friendListResponse = await axios.get(
-      `https://api.steampowered.com/ISteamUser/GetFriendList/v1/`,
+      `${API_BASE_URL}/ISteamUser/GetFriendList/v1/`,
       {
         params: {
           key: apiKey,
@@ -81,7 +82,7 @@ export const fetchFriends = async (): Promise<Friend[]> => {
     );
     // Запрос деталей друзей
     const friendsDetailsResponse = await axios.get(
-      `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/`,
+      `${API_BASE_URL}/ISteamUser/GetPlayerSummaries/v2/`,
       {
         params: {
           key: apiKey,
@@ -112,6 +113,8 @@ export const fetchFriends = async (): Promise<Friend[]> => {
       return dateB.getTime() - dateA.getTime();
     });
   } catch (error) {
-    throw new Error('Ошибка при получении данных. Пожалуйста, попробуйте позже');
+    throw new Error(
+      'Ошибка при получении данных. Пожалуйста, попробуйте позже',
+    );
   }
 };

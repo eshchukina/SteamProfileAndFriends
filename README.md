@@ -16,14 +16,15 @@
 ![screenshot 3](https://github.com/eshchukina/SteamProfileAndFriends/blob/main/src/assets/screenshots/photo_2024-11-04_23-41-42.jpg)
 ![screenshot 4](https://github.com/eshchukina/SteamProfileAndFriends/blob/main/src/assets/screenshots/photo_2024-11-04_23-41-44.jpg)
 ![screenshot 5](https://github.com/eshchukina/SteamProfileAndFriends/blob/main/src/assets/screenshots/photo_2024-11-05_18-13-59.jpg)
+![screenshot 6](https://github.com/eshchukina/SteamProfileAndFriends/blob/main/src/assets/screenshots/photo_2024-11-05_18-36-37.jpg)
 ![screenshot 7](https://github.com/eshchukina/SteamProfileAndFriends/blob/main/src/assets/screenshots/photo_2024-11-04_23-41-54.jpg)
-![screenshot 7](https://github.com/eshchukina/SteamProfileAndFriends/blob/main/src/assets/screenshots/photo_2024-11-04_23-41-58.jpg)
-![screenshot 8](https://github.com/eshchukina/SteamProfileAndFriends/blob/main/src/assets/screenshots/photo_2024-11-04_23-41-56.jpg)
-Отображение пустого списка друзей:
-![screenshot 9](https://github.com/eshchukina/SteamProfileAndFriends/blob/main/src/assets/screenshots/photo_2024-11-05_18-13-55.jpg)
-Отображение ошибок в профиле и на странице друзей:
-![screenshot 10](https://github.com/eshchukina/SteamProfileAndFriends/blob/main/src/assets/screenshots/photo_2024-11-05_18-13-46.jpg)
-![screenshot 11](https://github.com/eshchukina/SteamProfileAndFriends/blob/main/src/assets/screenshots/photo_2024-11-05_18-13-51.jpg)
+![screenshot 8](https://github.com/eshchukina/SteamProfileAndFriends/blob/main/src/assets/screenshots/photo_2024-11-04_23-41-58.jpg)
+![screenshot 9](https://github.com/eshchukina/SteamProfileAndFriends/blob/main/src/assets/screenshots/photo_2024-11-04_23-41-56.jpg)
+### Отображение пустого списка друзей:
+![screenshot 10](https://github.com/eshchukina/SteamProfileAndFriends/blob/main/src/assets/screenshots/photo_2024-11-05_18-13-55.jpg)
+### Отображение ошибок в профиле и на странице друзей
+![screenshot 11](https://github.com/eshchukina/SteamProfileAndFriends/blob/main/src/assets/screenshots/photo_2024-11-05_18-13-46.jpg)
+![screenshot 12](https://github.com/eshchukina/SteamProfileAndFriends/blob/main/src/assets/screenshots/photo_2024-11-05_18-13-51.jpg)
 
 
 This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).

@@ -1,13 +1,7 @@
+// Контекст для управления аутентификацией, используется AsyncStorage для хранения данных
 import React, {createContext, useContext, useState, useEffect} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-type AuthContextType = {
-  apiKey: string | null;
-  steamId: string | null;
-  login: (apiKey: string, steamId: string) => Promise<void>;
-  logout: () => Promise<void>;
-  isLoading: boolean;
-};
+import {AuthContextType} from '../types/types';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -18,6 +12,7 @@ export const AuthProvider: React.FC<{children: React.ReactNode}> = ({
   const [steamId, setSteamId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Происходит загрузка данных аутентификации из AsyncStorage. Если данные найдены, они сохраняются в состояние
   useEffect(() => {
     const loadAuthData = async () => {
       try {
@@ -28,7 +23,7 @@ export const AuthProvider: React.FC<{children: React.ReactNode}> = ({
           setSteamId(storedSteamId);
         }
       } catch (error) {
-        console.error('Failed to load auth data from storage', error);
+        console.error('Не удалось загрузить данные из хранилища', error);
       } finally {
         setIsLoading(false);
       }
@@ -36,6 +31,7 @@ export const AuthProvider: React.FC<{children: React.ReactNode}> = ({
     loadAuthData();
   }, []);
 
+  // Функция входа
   const login = async (newApiKey: string, newSteamId: string) => {
     setApiKey(newApiKey);
     setSteamId(newSteamId);
@@ -44,6 +40,7 @@ export const AuthProvider: React.FC<{children: React.ReactNode}> = ({
     console.log('authorization successful');
   };
 
+  // Функция выхода
   const logout = async () => {
     setApiKey(null);
     setSteamId(null);
@@ -52,6 +49,7 @@ export const AuthProvider: React.FC<{children: React.ReactNode}> = ({
     console.log('logged out of the app');
   };
 
+  // Предоставление контекста
   return (
     <AuthContext.Provider value={{apiKey, steamId, isLoading, login, logout}}>
       {children}

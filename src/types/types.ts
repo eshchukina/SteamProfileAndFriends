@@ -1,3 +1,4 @@
+// Типы для данных, используемых в приложении
 export type ProfileData = {
   steamid: string;
   personaname: string;
@@ -22,4 +23,12 @@ export type FriendInfo = {
 export type CustomButtonType = {
   title: string;
   onPress: () => void;
+};
+
+export type AuthContextType = {
+  apiKey: string | null;
+  steamId: string | null;
+  login: (apiKey: string, steamId: string) => Promise<void>;
+  logout: () => Promise<void>;
+  isLoading: boolean;
 };

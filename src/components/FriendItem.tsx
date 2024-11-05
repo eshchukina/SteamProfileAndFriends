@@ -1,3 +1,4 @@
+// Компонент FriendItem представляет информацию о друге, используется для отображения элементов списка друзей
 import React from 'react';
 import {View, Text, StyleSheet, Image} from 'react-native';
 import {FriendInfo} from '../types/types';

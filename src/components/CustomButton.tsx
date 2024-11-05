@@ -1,3 +1,4 @@
+// Компонент кнопки
 import React from 'react';
 import {TouchableOpacity, Text, StyleSheet} from 'react-native';
 import {CustomButtonType} from '../types/types';

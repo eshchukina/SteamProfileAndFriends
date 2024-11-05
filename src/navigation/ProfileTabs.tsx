@@ -1,9 +1,9 @@
+// Нижняя навигация с двумя экранами: UserProfile и FriendsList
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import FriendsList from '../screen/FriendsList';
 import UserProfile from '../screen/UserProfile';
-
+import TabBarIcon from '../components/TabBarIcon';
 const Tab = createBottomTabNavigator();
 
 const ProfileTabs = () => {
@@ -19,12 +19,11 @@ const ProfileTabs = () => {
             iconName = 'users';
             break;
         }
-        const tabBarIcon = ({color, size}: {color: string; size: number}) => (
-          <Icon name={iconName} size={size} color={color} />
-        );
 
         return {
-          tabBarIcon,
+          tabBarIcon: props => (
+            <TabBarIcon iconName={iconName} {...props} size={25} />
+          ),
           tabBarActiveTintColor: '#ff49b6',
           tabBarInactiveTintColor: '#c4c4c4',
           tabBarStyle: {backgroundColor: '#171d25'},

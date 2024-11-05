@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+// Экран авторизации
+import React, {useState, useCallback} from 'react';
 import {View, Text, StyleSheet, TextInput} from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../navigation/AppNavigator';
@@ -22,14 +23,17 @@ const AuthScreen: React.FC<Props> = ({navigation}) => {
   const [steamId, setSteamId] = useState('');
   const [error, setError] = useState('');
 
+  // Очистка поля ввода и ошибки каждый раз, когда экран становится активным
   useFocusEffect(
-    React.useCallback(() => {
+    useCallback(() => {
       setError('');
       setApiKey('');
       setSteamId('');
     }, []),
   );
 
+  // Функция handleLogin проверяет введенные данные, запрашивая профиль пользователя через fetchProfile
+  // Если данные верны, вызывается функция login, происходит переход на экран профиля, иначе появляется сообщение об ошибке
   const handleLogin = async () => {
     try {
       const profile = await fetchProfile(steamId, apiKey);
@@ -37,24 +41,22 @@ const AuthScreen: React.FC<Props> = ({navigation}) => {
         setError('Неверный API Key или Steam ID');
         return;
       }
-
       await login(apiKey, steamId);
       setError('');
       navigation.navigate('Profile');
-    } catch (error) {
-      if (error instanceof Error) {
-        setError(error.message);
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
       } else {
         setError('Не удалось сохранить данные. Попробуйте снова');
       }
     }
   };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Авторизация</Text>
-
       {error ? <Text style={styles.error}>{error}</Text> : null}
-
       <TextInput
         style={styles.input}
         placeholder="API Key"

@@ -1,11 +1,13 @@
+// Запросы для работы с API Steam
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Friend, ProfileData} from '../types/types';
 
+// Получение данныx профиля пользователя по его steam id и api key
 export const fetchProfile = async (
   steamId: string,
   apiKey: string,
-): Promise<ProfileData | null> => {
+): Promise<ProfileData> => {
   if (!apiKey) {
     throw new Error('Введите API Key');
   }
@@ -25,9 +27,7 @@ export const fetchProfile = async (
     );
 
     const players = response.data.response.players;
-
     if (!players || players.length === 0) {
-      console.log('Проверка игроков: массив пустой');
       throw new Error('Пользователь не найден. Проверьте Steam ID');
     }
 
@@ -44,15 +44,17 @@ export const fetchProfile = async (
         console.error('Ошибка без ответа от API:', error.message);
         throw new Error('Ошибка при загрузке данных профиля: ' + error.message);
       }
-    } else {
-      if (error instanceof Error) {
-        console.log(error.message);
-      }
     }
+
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    }
+
+    throw new Error('Неизвестная ошибка при загрузке данных профиля');
   }
-  return null;
 };
 
+// Получение списка друзей пользователя
 export const fetchFriends = async (): Promise<Friend[]> => {
   try {
     const apiKey = await AsyncStorage.getItem('apiKey');
@@ -61,7 +63,7 @@ export const fetchFriends = async (): Promise<Friend[]> => {
     if (!apiKey || !steamId) {
       throw new Error('API key или Steam ID отсутствуют');
     }
-
+    // Запрос для получения списка друзей
     const friendListResponse = await axios.get(
       `https://api.steampowered.com/ISteamUser/GetFriendList/v1/`,
       {
@@ -79,14 +81,14 @@ export const fetchFriends = async (): Promise<Friend[]> => {
         friendSince: new Date(friend.friend_since * 1000).toLocaleDateString(),
       }),
     );
-
+    // Запрос деталей друзей
     const friendsDetailsResponse = await axios.get(
       `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/`,
       {
         params: {
           key: apiKey,
           steamids: friendsSteamIds
-            .map((f: {steamid: any}) => f.steamid)
+            .map((f: {steamid: string}) => f.steamid)
             .join(','),
         },
       },
@@ -101,7 +103,7 @@ export const fetchFriends = async (): Promise<Friend[]> => {
             (f: {steamid: any}) => f.steamid === player.steamid,
           )?.friendSince || '',
       }));
-
+    // Сортировка списка друзей
     return friendsDetails.sort((a, b) => {
       const [monthA, dayA, yearA] = a.friendSince.split('/').map(Number);
       const [monthB, dayB, yearB] = b.friendSince.split('/').map(Number);
@@ -112,7 +114,6 @@ export const fetchFriends = async (): Promise<Friend[]> => {
       return dateB.getTime() - dateA.getTime();
     });
   } catch (error) {
-    console.error(error);
     throw new Error('Ошибка при загрузке данных друзей');
   }
 };

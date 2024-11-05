@@ -1,3 +1,4 @@
+// Компонент UserProfile отображает профиль пользователя
 import React, {useState, useEffect} from 'react';
 import {View, Text, StyleSheet, Image, ActivityIndicator} from 'react-native';
 import CustomButton from '../components/CustomButton';
@@ -5,6 +6,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../navigation/AppNavigator';
 import {useAuth} from '../context/AuthContext';
 import {fetchProfile} from '../api/steamApi';
+import {ProfileData} from '../types/types';
 
 type HomeScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -17,36 +19,37 @@ type Props = {
 
 const UserProfile: React.FC<Props> = ({navigation}) => {
   const {steamId, apiKey, logout} = useAuth();
-  const [profileData, setProfileData] = useState<any>(null);
+  const [profileData, setProfileData] = useState<ProfileData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Загрузка данных профиля, когда компонент монтируется или когда steam id или api key изменяются
   useEffect(() => {
     const loadProfile = async () => {
       if (!steamId || !apiKey) {
         setProfileData(null);
         return;
       }
-
       setLoading(true);
       setError(null);
       try {
         const profile = await fetchProfile(steamId, apiKey);
         setProfileData(profile);
-      } catch (error) {
-        if (error instanceof Error) {
-          setError(error.message);
-        } else {
-          setError('Произошла неизвестная ошибка');
+      } catch (err) {
+        if (err instanceof Error) {
+          console.log(err.message);
+          setError(
+            'Произошла ошибка при получении данных. Пожалуйста, попробуйте авторизоваться заново',
+          );
         }
       } finally {
         setLoading(false);
       }
     };
-
     loadProfile();
   }, [steamId, apiKey]);
 
+  // Выход из аккаунта
   const handleLogout = async () => {
     await logout();
     setProfileData(null);
@@ -56,7 +59,7 @@ const UserProfile: React.FC<Props> = ({navigation}) => {
   return (
     <View style={styles.container}>
       {loading ? (
-        <ActivityIndicator size="large" color="#FFFFFF" />
+        <ActivityIndicator size="large" color="#fff" />
       ) : error ? (
         <Text style={styles.errorText}>{error}</Text>
       ) : (
@@ -78,9 +81,8 @@ const UserProfile: React.FC<Props> = ({navigation}) => {
           </View>
         )
       )}
-
       <View>
-        <CustomButton title="Выйти" onPress={handleLogout} />
+        {!loading && <CustomButton title="Выйти" onPress={handleLogout} />}
       </View>
     </View>
   );

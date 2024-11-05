@@ -37,8 +37,6 @@ export const fetchProfile = async (
       if (error.response) {
         if (error.response.status === 403) {
           throw new Error('Проверьте правильность API Key');
-        } else if (error.response.status === 404) {
-          throw new Error('Пользователь не найден. Проверьте Steam ID');
         }
       } else {
         console.error('Ошибка без ответа от API:', error.message);

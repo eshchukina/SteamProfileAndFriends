@@ -26,7 +26,7 @@ export const fetchProfile = async (
         },
       },
     );
-
+console.log('response', response.data.response.players)
     const players = response.data.response.players;
     if (!players || players.length === 0) {
       throw new Error('Пользователь не найден. Проверьте Steam ID');

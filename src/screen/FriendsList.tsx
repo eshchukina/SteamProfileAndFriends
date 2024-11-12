@@ -1,5 +1,5 @@
 // Компонент FriendsList реализует экран, который отображает список друзей
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {
   View,
   StyleSheet,
@@ -42,6 +42,17 @@ const FriendsList: React.FC = () => {
     loadFriends();
   }, []);
 
+  const renderItem = useCallback(
+    ({item, index}: {item: Friend; index: number}) => (
+      <FriendItem
+        steamId={item.steamId}
+        index={index}
+        avatar={item.avatar}
+        friendSince={item.friendSince}
+      />
+    ),
+    [],
+  );
   return (
     <View style={styles.container}>
       {loading ? (
@@ -54,14 +65,7 @@ const FriendsList: React.FC = () => {
       ) : (
         <FlatList
           data={friendsData}
-          renderItem={({item, index}) => (
-            <FriendItem
-              steamId={item.steamId}
-              index={index}
-              avatar={item.avatar}
-              friendSince={item.friendSince}
-            />
-          )}
+          renderItem={renderItem}
           keyExtractor={item => item.steamId}
           ListEmptyComponent={
             <View style={styles.noFriendsContainer}>

@@ -4,6 +4,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import FriendsList from '../screen/FriendsList';
 import UserProfile from '../screen/UserProfile';
 import TabBarIcon from '../components/TabBarIcon';
+
 const Tab = createBottomTabNavigator();
 
 const ProfileTabs = () => {
